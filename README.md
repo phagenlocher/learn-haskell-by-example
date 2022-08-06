@@ -1,6 +1,6 @@
 # Haskell Bookcamp
 
-This repository contains the code for the projects in the book [Haskell Bookcamp](https://www.manning.com/books/haskell-bookcamp). The code is organized by chapter, each subdirectory containing a README with further comments. 
+This repository contains the code for the projects in the book [Haskell Bookcamp](https://shortener.manning.com/lRp6). The code is organized by chapter, each subdirectory containing a README with further comments. 
 
 ## Discussion
 
