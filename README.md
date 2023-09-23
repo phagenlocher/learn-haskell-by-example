@@ -17,13 +17,13 @@ If you don't want to install any parts of the Haskell toolchain on your computer
 When located in this repository you can build an image from the docker file like so:
 
 ```
-shell $ docker build -t haskell-bookcamp .
+docker build -t haskell-bookcamp .
 ```
 
 After building the image you can get a container running that mounts the repository into `/work` where the code can be run. You could also mount your own Haskell projects into the container for ease of use!
 
 ```
-shell $ docker run \
+docker run \
   -ti \
   --mount type=bind,source="$(pwd)",target=/work \
   haskell-bookcamp \
