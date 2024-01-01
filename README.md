@@ -1,6 +1,6 @@
-# Haskell Bookcamp
+# Learn Haskell by Example
 
-This repository contains the code for the projects in the book [Haskell Bookcamp](https://shortener.manning.com/lRp6). The code is organized by chapter, each subdirectory containing a README with further comments.
+This repository contains the code for the projects in the book [Learn Haskell by Example](https://shortener.manning.com/lRp6). The code is organized by chapter, each subdirectory containing a README with further comments.
 
 ## Discussion
 
@@ -17,7 +17,7 @@ If you don't want to install any parts of the Haskell toolchain on your computer
 When located in this repository you can build an image from the docker file like so:
 
 ```
-docker build -t haskell-bookcamp .
+docker build -t learn-haskell .
 ```
 
 After building the image you can get a container running that mounts the repository into `/work` where the code can be run. You could also mount your own Haskell projects into the container for ease of use!
@@ -26,6 +26,6 @@ After building the image you can get a container running that mounts the reposit
 docker run \
   -ti \
   --mount type=bind,source="$(pwd)",target=/work \
-  haskell-bookcamp \
+  learn-haskell \
   bash
 ```
