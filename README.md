@@ -4,7 +4,7 @@ This repository contains the code for the projects in the book [Learn Haskell by
 
 ## Discussion
 
-If anything about the code or book seems to be unclear or you spot an error, you can always join in the discussion in the [liveBook discussion form](https://livebook.manning.com/book/haskell-bookcamp/discussion) or open an issue in this repository!
+If anything about the code or book seems to be unclear or you spot an error, you can always join in the discussion in the [liveBook discussion form](https://livebook.manning.com/book/learn-haskell-by-example) or open an issue in this repository!
 
 ## Requirements
 
