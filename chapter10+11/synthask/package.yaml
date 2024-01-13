@@ -1,0 +1,69 @@
+name:                synthask
+version:             0.1.0.0
+github:              "phagenlocher/learn-haskell-by-example"
+license:             BSD3
+author:              "Philipp Hagenlocher"
+maintainer:          "me@philipphagenlocher.de"
+copyright:           "BSD3"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/phagenlocher/learn-haskell-by-example#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- HCodecs
+- array
+- QuickCheck >= 2.0
+- containers
+
+default-extensions:
+- OverloadedStrings
+- RecordWildCards
+- NamedFieldPuns
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+- -O2
+
+library:
+  source-dirs: src
+
+executables:
+  synthask-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - synthask
+
+tests:
+  synthask-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - synthask

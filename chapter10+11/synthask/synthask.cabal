@@ -1,0 +1,92 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           synthask
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/phagenlocher/learn-haskell-by-example#readme>
+homepage:       https://github.com/phagenlocher/learn-haskell-by-example#readme
+bug-reports:    https://github.com/phagenlocher/learn-haskell-by-example/issues
+author:         Philipp Hagenlocher
+maintainer:     me@philipphagenlocher.de
+copyright:      BSD3
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/phagenlocher/learn-haskell-by-example
+
+library
+  exposed-modules:
+      Composition.Note
+      Composition.Notelength
+      Composition.Performance
+      Composition.Pitch
+      Sound.Sampler
+      Sound.Sound
+      Sound.Synth
+      Util.Types
+  other-modules:
+      Paths_synthask
+  hs-source-dirs:
+      src
+  default-extensions:
+      OverloadedStrings
+      RecordWildCards
+      NamedFieldPuns
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2
+  build-depends:
+      HCodecs
+    , QuickCheck >=2.0
+    , array
+    , base >=4.7 && <5
+    , containers
+  default-language: Haskell2010
+
+executable synthask-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_synthask
+  hs-source-dirs:
+      app
+  default-extensions:
+      OverloadedStrings
+      RecordWildCards
+      NamedFieldPuns
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HCodecs
+    , QuickCheck >=2.0
+    , array
+    , base >=4.7 && <5
+    , containers
+    , synthask
+  default-language: Haskell2010
+
+test-suite synthask-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_synthask
+  hs-source-dirs:
+      test
+  default-extensions:
+      OverloadedStrings
+      RecordWildCards
+      NamedFieldPuns
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      HCodecs
+    , QuickCheck >=2.0
+    , array
+    , base >=4.7 && <5
+    , containers
+    , synthask
+  default-language: Haskell2010
