@@ -24,6 +24,6 @@ main = do
   s1success <- S1.runTests
   when (fastFail && not s1success) exitFailure
   s2success <- S2.runTests
-  if s2success
+  if s1success && s2success
     then exitSuccess
     else exitFailure

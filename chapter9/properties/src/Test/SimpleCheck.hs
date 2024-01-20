@@ -215,33 +215,3 @@ propertyTestWithPreCondition precond predicate random n
           then propertyTestWithPreCondition precond predicate random $ n - 1
           else putStrLn $ "Test failed on: " <> show testCase
 
-primes :: [Int]
-primes = aux 2 [3 ..]
-  where
-    aux n ns =
-      let (x : xs) = filter (\x -> x `mod` n /= 0) ns
-       in n : aux x xs
-
-prime :: Int -> Int
-prime n = primes !! max 0 n
-
-piFun :: Int -> Int
-piFun n = length $ takeWhile (<= n) primes
-
-adjPairs :: [a] -> [(a, a)]
-adjPairs xs = zip xs (tail xs)
-
-runLengthEncoding :: Eq a => [a] -> [(Int, a)]
-runLengthEncoding [] = []
-runLengthEncoding [x] = [(1, x)]
-runLengthEncoding (x : y : xs)
-  | x /= y = (1, x) : runLengthEncoding (y : xs)
-  | otherwise = case runLengthEncoding (y : xs) of
-    [] -> [(2, x)]
-    (n, x) : rest -> (n + 1, x) : rest
-
-runLengthDecoding :: [(Int, a)] -> [a]
-runLengthDecoding = foldl (\acc (n, x) -> acc ++ replicate n x) []
-
-primeRepeats :: [Int]
-primeRepeats = map fst $ runLengthEncoding $ map piFun [2 ..]
