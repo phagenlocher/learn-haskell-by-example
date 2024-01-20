@@ -9,7 +9,6 @@ module Data.AssocMap
     insert,
     lookup,
     findWithDefault,
-    elems,
     prop_lookup,
     prop_insertTwice,
     prop_delete,
@@ -95,9 +94,6 @@ findWithDefault defaultValue key map =
     Nothing -> defaultValue
     Just value -> value
 
-elems :: AssocMap k v -> [v]
-elems (AssocMap xs) = map snd xs
-
 {-
 Since we have implemented an instance of the Arbitrary typeclass for AssocMap it
 is not your turn, to write properties for the type that can be tested.
@@ -109,6 +105,7 @@ It’s important to check the basic function of this type as a map so we need to
   * Altering the map does not invalidate the invariant
 -}
 
+prop_lookup :: AssocMap Int Int -> Int -> Int -> Property
 prop_lookup am k v = label' $ lookup k (insert k v am) == Just v
   where
     label' =
@@ -117,8 +114,8 @@ prop_lookup am k v = label' $ lookup k (insert k v am) == Just v
             then "Key not present before insertion"
             else "Key present before insertion"
         )
-    types = (k :: Int, v :: Int)
 
+prop_insertTwice :: AssocMap Int Int -> Int -> Int -> Int -> Property
 prop_insertTwice am k v1 v2 =
   v1 /= v2 -- The test is only valid if v1 and v2 are not the same
     ==> label'
@@ -130,8 +127,9 @@ prop_insertTwice am k v1 v2 =
             then "Key not present before insertion"
             else "Key present before insertion"
         )
-    types = (k :: Int, v1 :: Int, v2 :: Int)
 
+-- We use `Bool` as a key so it is more propable that the key occurs
+prop_delete :: AssocMap Bool Int -> Bool -> Property
 prop_delete am k =
   label' $ lookup k (delete k am) == Nothing
   where
@@ -141,11 +139,11 @@ prop_delete am k =
             then "Key not present before deletion"
             else "Key present before deletion"
         )
-    -- We use `Bool` as a key so it is more propable that the key occurs
-    types = am :: AssocMap Bool Int
 
-prop_empty k = withMaxSuccess 10000 $ not (member (k :: Int) empty)
+prop_empty :: Int -> Property
+prop_empty k = withMaxSuccess 10000 $ not (member k empty)
 
+prop_alter :: AssocMap Int Int -> Int -> Maybe Int -> Property
 prop_alter am k mV =
   withMaxSuccess 1000 $ label' invariant_prop
   where
@@ -163,5 +161,3 @@ prop_alter am k mV =
                 then "Key not present before altering with " ++ value
                 else "Key present before altering with " ++ value
             )
-
-    types = (k :: Int, mV :: Maybe Int)
