@@ -1,6 +1,16 @@
 {-# LANGUAGE ViewPatterns #-}
 
-module Csv.Print where
+module Csv.Print
+  ( writeCsv,
+    printCsv,
+    PrettyCsv (..),
+    fromCsv,
+    unsafeWithSummaries,
+    withSummaries,
+    pretty,
+    prettyText,
+  )
+where
 
 import Csv.Types
 import qualified Data.Either as E
@@ -65,7 +75,7 @@ withSummaries ::
   Either String PrettyCsv
 withSummaries pcsv@(PrettyCsv {..}) summaries
   | length summaries /= length pc_columns =
-    Left "The number of summaries does not match the number of columns"
+      Left "The number of summaries does not match the number of columns"
   | otherwise = Right $ pcsv {pc_summaries = Just $ summaries}
 
 pretty :: PrettyCsv -> String

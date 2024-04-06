@@ -1,4 +1,9 @@
-module Ladder where
+module Ladder
+  ( Dictionary,
+    readDictionary,
+    ladderSolve,
+  )
+where
 
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as C

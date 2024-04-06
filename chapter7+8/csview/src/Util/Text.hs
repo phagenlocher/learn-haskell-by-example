@@ -1,4 +1,11 @@
-module Util.Text where
+module Util.Text
+  ( startsWith,
+    endsWith,
+    isEnclosedBy,
+    quote,
+    contains,
+  )
+where
 
 import qualified Data.Text as T
 
@@ -16,13 +23,6 @@ endsWith t c =
 
 isEnclosedBy :: T.Text -> Char -> Bool
 isEnclosedBy t c = t `startsWith` c && t `endsWith` c
-
--- unquote :: T.Text -> T.Text
--- unquote t
---   | not $ t `isEnclosedBy` '"' = t
---   | otherwise =
---     T.replace "\\\"" "\"" $
---       T.tail $ T.init t
 
 quote :: T.Text -> T.Text
 quote = T.cons '"' . flip T.snoc '"' . T.replace "\"" "\"\"\""

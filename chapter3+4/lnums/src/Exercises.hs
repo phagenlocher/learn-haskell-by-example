@@ -1,4 +1,17 @@
-module Exercises where
+module Exercises
+  ( lines',
+    words',
+    unlines',
+    unwords',
+    pad',
+    zip',
+    zipWith',
+    zip'',
+    sequence',
+    mapM',
+    mapM_',
+  )
+where
 
 {-
  == NOTE ==
@@ -33,30 +46,30 @@ cases.
 -}
 lines' :: String -> [String]
 lines' "" = []
-lines' xs =
+lines' text =
   let go "" "" = []
       go line "" = [line]
-      go line (x:xs)
+      go line (x : xs)
         | x == '\n' = line : go "" xs
         | otherwise = go (line ++ [x]) xs
-   in go "" xs
+   in go "" text
 
 words' :: String -> [String]
-words' xs =
+words' text =
   let go "" "" = []
       go word "" = [word]
-      go word (x:xs)
+      go word (x : xs)
         | x == ' ' = if word /= "" then word : go "" xs else go "" xs
         | otherwise = go (word ++ [x]) xs
-   in go "" xs
+   in go "" text
 
 unlines' :: [String] -> String
 unlines' [] = ""
-unlines' (x:xs) = x ++ "\n" ++ unlines' xs
+unlines' (x : xs) = x ++ "\n" ++ unlines' xs
 
 unwords' :: [String] -> String
 unwords' [] = ""
-unwords' (x:xs) = x ++ " " ++ unwords' xs
+unwords' (x : xs) = x ++ " " ++ unwords' xs
 
 {-
 The project from the previous chapter was implemented without using eta
@@ -129,20 +142,20 @@ more powerful (higher-order) function being used to arrive at the definition
 of a less powerful function with diverse application.
 -}
 
-zip' :: [a] -> [b] -> [(a,b)]
+zip' :: [a] -> [b] -> [(a, b)]
 zip' [] [] = []
 zip' _ [] = []
 zip' [] _ = []
-zip' (x:xs) (y:ys) = (x,y) : zip' xs ys
+zip' (x : xs) (y : ys) = (x, y) : zip' xs ys
 
 zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith' _ [] [] = []
 zipWith' _ _ [] = []
 zipWith' _ [] _ = []
-zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+zipWith' f (x : xs) (y : ys) = f x y : zipWith' f xs ys
 
-zip'' :: [a] -> [b] -> [(a,b)]
-zip'' = zipWith' (\x y -> (x,y))
+zip'' :: [a] -> [b] -> [(a, b)]
+zip'' = zipWith' (\x y -> (x, y))
 
 {-
 For simplicities sake we can assume the types for the two action map-functions
@@ -178,20 +191,20 @@ being returned / evaluated.
 
 sequence' :: [IO a] -> IO [a]
 sequence' [] = return []
-sequence' (act:xs) = do
+sequence' (act : xs) = do
   res <- act
   recRes <- sequence' xs
   return (res : recRes)
 
 mapM' :: (a -> IO b) -> [a] -> IO [b]
 mapM' _ [] = return []
-mapM' f (x:xs) = do
+mapM' f (x : xs) = do
   res <- f x
   recRes <- mapM' f xs
   return (res : recRes)
 
 mapM_' :: (a -> IO b) -> [a] -> IO ()
 mapM_' _ [] = return ()
-mapM_' f (x:xs) = do
-  f x
+mapM_' f (x : xs) = do
+  _ <- f x
   mapM_' f xs

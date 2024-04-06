@@ -1,4 +1,8 @@
-module Sound.Sound where
+module Sound.Sound
+  ( mix,
+    Performer (..),
+  )
+where
 
 import Composition.Notelength
 import Composition.Performance
@@ -36,11 +40,11 @@ instance Performer Oscillator where
       playEvents _ [] = []
       playEvents curTime (event : xs)
         | curTime < ts =
-          concat
-            [ silence (ts - curTime),
-              oscf event,
-              playEvents te xs
-            ]
+            concat
+              [ silence (ts - curTime),
+                oscf event,
+                playEvents te xs
+              ]
         | curTime == ts = oscf event ++ playEvents te xs
         | otherwise = error "Event occurs in the past!"
         where
@@ -69,11 +73,11 @@ instance Performer Sampler where
       playEvents _ [] = []
       playEvents curTime (event : xs)
         | curTime < ts =
-          concat
-            [ silence (ts - curTime),
-              playSample event,
-              playEvents te xs
-            ]
+            concat
+              [ silence (ts - curTime),
+                playSample event,
+                playEvents te xs
+              ]
         | curTime == ts = playSample event ++ playEvents te xs
         | otherwise = error "Event occurs in the past!"
         where

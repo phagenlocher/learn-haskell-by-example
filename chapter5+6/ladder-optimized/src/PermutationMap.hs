@@ -1,8 +1,20 @@
-module PermutationMap where
+module PermutationMap
+  ( PermutationMap,
+    empty,
+    member,
+    alter,
+    delete,
+    insert,
+    lookup,
+    findWithDefault,
+    createPermutationMap,
+  )
+where
 
 import qualified Data.ByteString as BS
 import qualified Data.HashMap.Lazy as M
 import Data.Maybe (fromMaybe)
+import Prelude hiding (lookup)
 
 type PermutationMap = M.HashMap BS.ByteString [BS.ByteString]
 

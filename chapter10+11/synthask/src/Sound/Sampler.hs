@@ -1,10 +1,21 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Sound.Sampler where
+module Sound.Sampler
+  ( SampleMapping,
+    SampleMap,
+    Sampler (..),
+    mkSampler,
+    (=:),
+    wav,
+    getSample,
+  )
+where
 
 import qualified Codec.Wav
 import Composition.Notelength (Seconds)
 import Composition.Pitch (Hz, Pitchable, toFrequency)
+import Data.Array.Base (MArray)
+import Data.Array.IO (IOUArray)
 import Data.Array.Unboxed (IArray, UArray, elems)
 import Data.Audio
 import qualified Data.Map as M
@@ -33,6 +44,14 @@ mkSampler mapping = Sampler $ SampleMap sampleMap
     signalFromSampleData :: (Audible a, IArray UArray a) => SampleData a -> Signal
     signalFromSampleData = map toSample . elems
 
+wav ::
+  ( MArray IOUArray a IO,
+    IArray UArray a,
+    Audible a,
+    Codec.Wav.AudibleInWav a
+  ) =>
+  FilePath ->
+  IO (Audio a)
 wav filepath = do
   mAudio <- Codec.Wav.importFile filepath
   return $ either error checkSampleRate mAudio
@@ -41,15 +60,15 @@ wav filepath = do
     checkSampleRate audio
       | fromIntegral (Data.Audio.sampleRate audio) == Util.Types.sampleRate = audio
       | otherwise =
-        error $
-          "Samplerate of "
-            ++ filepath
-            ++ " ("
-            ++ show (Data.Audio.sampleRate audio)
-            ++ "Hz) "
-            ++ "does not match project sample rate of "
-            ++ show (round Util.Types.sampleRate)
-            ++ "Hz!"
+          error $
+            "Samplerate of "
+              ++ filepath
+              ++ " ("
+              ++ show (Data.Audio.sampleRate audio)
+              ++ "Hz) "
+              ++ "does not match project sample rate of "
+              ++ show Util.Types.sampleRate
+              ++ "Hz!"
 
 getSample :: SampleMap -> Hz -> Seconds -> Signal
 getSample (SampleMap sampleMap) freq duration =

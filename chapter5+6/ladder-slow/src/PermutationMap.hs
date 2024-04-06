@@ -1,15 +1,27 @@
-module PermutationMap where
+module PermutationMap
+  ( PermutationMap,
+    empty,
+    member,
+    alter,
+    delete,
+    insert,
+    lookup,
+    findWithDefault,
+    createPermutationMap,
+  )
+where
 
 import qualified Data.AssocMap as M
 import qualified Data.List as L
 import Data.Maybe (fromMaybe)
+import Prelude hiding (lookup)
 
 type PermutationMap = M.AssocMap String [String]
 
 empty :: PermutationMap
 empty = M.empty
 
-member ::  String -> PermutationMap -> Bool
+member :: String -> PermutationMap -> Bool
 member key = M.member (L.sort key)
 
 alter ::

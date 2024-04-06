@@ -1,6 +1,21 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Graph where
+module Graph
+  ( DiGraph,
+    empty,
+    addNode,
+    addEdge,
+    addEdges,
+    buildDiGraph,
+    children,
+    deleteNode,
+    deleteNodes,
+    deleteEdge,
+    SearchState,
+    SearchResult (..),
+    bfsSearch,
+  )
+where
 
 import qualified Data.AssocMap as M
 import qualified Data.List as L
@@ -10,7 +25,7 @@ type DiGraph a = M.AssocMap a [a]
 empty :: DiGraph a
 empty = M.empty
 
-addNode :: Eq a => a -> DiGraph a -> DiGraph a
+addNode :: (Eq a) => a -> DiGraph a -> DiGraph a
 addNode =
   M.alter
     ( \mNodes ->
@@ -19,34 +34,34 @@ addNode =
           value -> value
     )
 
-addEdge :: Eq a => (a, a) -> DiGraph a -> DiGraph a
+addEdge :: (Eq a) => (a, a) -> DiGraph a -> DiGraph a
 addEdge (node, child) = M.alter insertEdge node
   where
     insertEdge Nothing = Just [child]
     insertEdge (Just nodes) =
       Just (L.nub (child : nodes))
 
-addEdges :: Eq a => [(a, a)] -> DiGraph a -> DiGraph a
+addEdges :: (Eq a) => [(a, a)] -> DiGraph a -> DiGraph a
 addEdges [] graph = graph
 addEdges (edge : edges) graph = addEdge edge (addEdges edges graph)
 
-buildDiGraph :: Eq a => [(a, [a])] -> DiGraph a
+buildDiGraph :: (Eq a) => [(a, [a])] -> DiGraph a
 buildDiGraph nodes = go nodes M.empty
   where
     go [] graph = graph
     go ((key, value) : xs) graph = M.insert key value (go xs graph)
 
-children :: Eq a => a -> DiGraph a -> [a]
+children :: (Eq a) => a -> DiGraph a -> [a]
 children = M.findWithDefault []
 
-deleteNode :: Eq a => a -> DiGraph a -> DiGraph a
+deleteNode :: (Eq a) => a -> DiGraph a -> DiGraph a
 deleteNode = M.delete
 
-deleteNodes :: Eq a => [a] -> DiGraph a -> DiGraph a
+deleteNodes :: (Eq a) => [a] -> DiGraph a -> DiGraph a
 deleteNodes [] graph = graph
 deleteNodes (x : xs) graph = M.delete x (deleteNodes xs graph)
 
-deleteEdge :: Eq a => (a, a) -> DiGraph a -> DiGraph a
+deleteEdge :: (Eq a) => (a, a) -> DiGraph a -> DiGraph a
 deleteEdge (node, child) =
   M.alter
     ( \mNodes ->
@@ -61,13 +76,13 @@ type SearchState a = ([a], DiGraph a, DiGraph a)
 
 data SearchResult a = Unsuccessful | Successful (DiGraph a)
 
-bfsSearch :: forall a. Eq a => DiGraph a -> a -> a -> Maybe [a]
+bfsSearch :: forall a. (Eq a) => DiGraph a -> a -> a -> Maybe [a]
 bfsSearch graph start end
   | start == end = Just [start]
   | otherwise =
-    case bfsSearch' ([start], graph, empty) of
-          Successful preds -> Just (findSolution preds)
-          Unsuccessful -> Nothing
+      case bfsSearch' ([start], graph, empty) of
+        Successful preds -> Just (findSolution preds)
+        Unsuccessful -> Nothing
   where
     findSolution :: DiGraph a -> [a]
     findSolution g = L.reverse (go end)

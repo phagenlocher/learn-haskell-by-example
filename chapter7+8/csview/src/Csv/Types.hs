@@ -1,4 +1,16 @@
-module Csv.Types where
+module Csv.Types
+  ( DataField (..),
+    dataFieldToText,
+    textToDataField,
+    Column,
+    Csv (..),
+    unsafeMkCsv,
+    mkCsv,
+    numberOfRows,
+    numberOfColumns,
+    appendCsv,
+  )
+where
 
 import qualified Data.Either as E
 import qualified Data.List as L
@@ -39,9 +51,9 @@ unsafeMkCsv header columns =
 mkCsv :: Maybe [T.Text] -> [Column] -> Either String Csv
 mkCsv mHeader columns
   | not headerSizeCorrect =
-    Left "Size of header row does not fit number of columns"
+      Left "Size of header row does not fit number of columns"
   | not columnSizesCorrect =
-    Left "The columns do not have equal sizes"
+      Left "The columns do not have equal sizes"
   | otherwise = Right Csv {csvHeader = mHeader, csvColumns = columns}
   where
     headerSizeCorrect =

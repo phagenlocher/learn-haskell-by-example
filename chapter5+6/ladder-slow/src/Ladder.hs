@@ -1,4 +1,9 @@
-module Ladder where
+module Ladder
+  ( Dictionary,
+    readDictionary,
+    ladderSolve,
+  )
+where
 
 import qualified Data.List as L
 import qualified Graph as G

@@ -1,4 +1,25 @@
-module Sound.Synth where
+module Sound.Synth
+  ( Sound.Synth.sin,
+    sqw,
+    saw,
+    tri,
+    pls,
+    silence,
+    tone,
+    tone',
+    Oscillator (..),
+    osc,
+    ADSR (..),
+    adsr,
+    piano,
+    ocarina,
+    violin,
+    pluck,
+    bass,
+    modulate,
+    tremolo,
+  )
+where
 
 import Composition.Notelength
 import Composition.Performance

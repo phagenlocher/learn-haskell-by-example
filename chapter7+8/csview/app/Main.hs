@@ -1,4 +1,4 @@
-module Main where
+module Main (main) where
 
 import qualified Csv
 import qualified Data.Either as E

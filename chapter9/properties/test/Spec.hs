@@ -1,7 +1,4 @@
-module Main
-  ( main,
-  )
-where
+module Main (main) where
 
 import Control.Monad (when)
 import qualified SuiteOne as S1

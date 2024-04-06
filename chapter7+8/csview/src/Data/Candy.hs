@@ -1,4 +1,14 @@
-module Data.Candy where
+module Data.Candy
+  ( Candy (..),
+    CandyTrail,
+    walkOnTrail,
+    isFruity,
+    collectFruits,
+    collectLastFive,
+    foldLeft,
+    foldRight,
+  )
+where
 
 data Candy
   = Lemon

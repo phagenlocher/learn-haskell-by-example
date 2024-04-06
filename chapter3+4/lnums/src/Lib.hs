@@ -1,4 +1,19 @@
-module Lib where
+module Lib
+  ( NumberedLine,
+    NumberedLines,
+    isEmpty,
+    isNotEmpty,
+    numberLines,
+    numberAllLines,
+    numberNonEmptyLines,
+    numberAndIncrementNonEmptyLines,
+    prettyNumberedLines,
+    PadMode (..),
+    pad,
+    padLeft,
+    padRight,
+  )
+where
 
 import Data.Char
 
@@ -15,14 +30,14 @@ isNotEmpty :: String -> Bool
 isNotEmpty str = not (isEmpty str)
 
 numberLines :: (String -> Bool) -> (String -> Bool) -> [String] -> NumberedLines
-numberLines shouldIncr shouldNumber lines =
+numberLines shouldIncr shouldNumber text =
   let go :: Int -> [String] -> NumberedLines
       go _ [] = []
       go counter (x : xs) =
         let mNumbering = if shouldNumber x then Just counter else Nothing
             newCounter = if shouldIncr x then counter + 1 else counter
          in (mNumbering, x) : go newCounter xs
-   in go 1 lines
+   in go 1 text
 
 numberAllLines :: [String] -> NumberedLines
 numberAllLines = numberLines (const True) (const True)
@@ -35,11 +50,11 @@ numberAndIncrementNonEmptyLines = numberLines isNotEmpty isNotEmpty
 
 prettyNumberedLines :: PadMode -> NumberedLines -> [String]
 prettyNumberedLines mode lineNums =
-  let (numbers, lines) = unzip lineNums
+  let (numbers, text) = unzip lineNums
       numberStrings = map (maybe "" show) numbers
       maxLength = maximum (map length numberStrings)
       paddedNumbers = map (pad mode maxLength) numberStrings
-   in zipWith (\n l -> n ++ " " ++ l) paddedNumbers lines
+   in zipWith (\n l -> n ++ " " ++ l) paddedNumbers text
 
 data PadMode = PadLeft | PadRight
 

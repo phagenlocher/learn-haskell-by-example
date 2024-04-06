@@ -1,4 +1,9 @@
-module Data.Sliceable where
+module Data.Sliceable
+  ( Sliceable (..),
+    sliceMap,
+    sliceDelete,
+  )
+where
 
 class Sliceable a where
   slice :: Int -> Int -> a -> a
@@ -14,7 +19,7 @@ instance Sliceable [a] where
       drop idx2 xs
     )
 
-instance Sliceable a => Sliceable (Maybe a) where
+instance (Sliceable a) => Sliceable (Maybe a) where
   slicePartition _ _ Nothing =
     (Nothing, Nothing, Nothing)
   slicePartition idx1 idx2 (Just xs) =

@@ -1,4 +1,42 @@
-module Test.SimpleCheck where
+module Test.SimpleCheck
+  ( RandomState,
+    randomInt,
+    randomIntList,
+    randomListN,
+    randomList,
+    randomList',
+    randomListIO,
+    applyGlobalStdGen,
+    sorted,
+    sorts,
+    propertyTestSorts,
+    RandomIO (..),
+    one,
+    some,
+    replicateIO,
+    suchThat,
+    nonNegative,
+    nonEmpty,
+    asciiChar,
+    letterChar,
+    manyOf,
+    asciiString,
+    letterString,
+    elements,
+    asciiChar',
+    letterChar',
+    asciiString',
+    letterString',
+    oneof,
+    listOf,
+    listOf1,
+    vectorOf,
+    shuffle,
+    sublistOf,
+    propertyTest,
+    propertyTestWithPreCondition,
+  )
+where
 
 import Data.Char
 import qualified Data.List as L
@@ -16,16 +54,16 @@ randomIntList :: RandomState -> Int -> [Int]
 randomIntList rs n
   | n <= 0 = []
   | otherwise =
-    let (v, rs') = randomInt rs
-     in v : randomIntList rs' (n - 1)
+      let (v, rs') = randomInt rs
+       in v : randomIntList rs' (n - 1)
 
 randomListN :: (Random a) => StdGen -> Int -> ([a], StdGen)
 randomListN gen n
   | n <= 0 = ([], gen)
   | otherwise =
-    let (v, gen') = random gen
-        (xs, gen'') = randomListN gen' (n - 1)
-     in (v : xs, gen'')
+      let (v, gen') = random gen
+          (xs, gen'') = randomListN gen' (n - 1)
+       in (v : xs, gen'')
 
 randomList :: (Random a) => StdGen -> Int -> ([a], StdGen)
 randomList gen max = randomListN gen' n
@@ -45,22 +83,22 @@ randomListIO = do
 applyGlobalStdGen :: (StdGen -> (a, StdGen)) -> IO a
 applyGlobalStdGen f = applyAtomicGen f globalStdGen
 
-sorted :: Ord a => [a] -> Bool
+sorted :: (Ord a) => [a] -> Bool
 sorted [] = True
 sorted [x] = True
 sorted (x : y : xs) = x <= y && sorted (y : xs)
 
-sorts :: Ord a => ([a] -> [a]) -> [a] -> Bool
+sorts :: (Ord a) => ([a] -> [a]) -> [a] -> Bool
 sorts f input = sorted $ f input
 
 propertyTestSorts :: ([Int] -> [Int]) -> Int -> IO ()
 propertyTestSorts f n
   | n <= 0 = putStrLn "Test successful!"
   | otherwise = do
-    xs <- applyGlobalStdGen randomList'
-    if f `sorts` xs
-      then propertyTestSorts f $ n - 1
-      else putStrLn $ "Test failed on: " <> show xs
+      xs <- applyGlobalStdGen randomList'
+      if f `sorts` xs
+        then propertyTestSorts f $ n - 1
+        else putStrLn $ "Test failed on: " <> show xs
 
 newtype RandomIO a = RandomIO {runRandomIO :: IO a}
 
@@ -75,10 +113,10 @@ function to the random value. Implement this instance!
 instance Functor RandomIO where
   fmap f rio = RandomIO $ fmap f (runRandomIO rio)
 
-one :: Random a => RandomIO a
+one :: (Random a) => RandomIO a
 one = RandomIO $ applyGlobalStdGen random
 
-some :: Random a => RandomIO [a]
+some :: (Random a) => RandomIO [a]
 some = RandomIO $ do
   n <- applyGlobalStdGen $ uniformR (0, 100)
   replicateIO n $ runRandomIO one
@@ -87,9 +125,9 @@ replicateIO :: Int -> IO a -> IO [a]
 replicateIO n act
   | n <= 0 = return []
   | otherwise = do
-    x <- act
-    xs <- replicateIO (n - 1) act
-    return $ x : xs
+      x <- act
+      xs <- replicateIO (n - 1) act
+      return $ x : xs
 
 suchThat :: RandomIO a -> (a -> Bool) -> RandomIO a
 suchThat rand pred = RandomIO $ do
@@ -101,7 +139,7 @@ suchThat rand pred = RandomIO $ do
 nonNegative :: (Num a, Ord a, Random a) => RandomIO a
 nonNegative = one `suchThat` (> 0)
 
-nonEmpty :: Random a => RandomIO [a]
+nonEmpty :: (Random a) => RandomIO [a]
 nonEmpty = some `suchThat` (not . null)
 
 asciiChar :: RandomIO Char
@@ -193,25 +231,24 @@ sublistOf (x : xs) = RandomIO $ do
     then return $ x : xs'
     else return xs'
 
-propertyTest :: Show a => (a -> Bool) -> RandomIO a -> Int -> IO ()
+propertyTest :: (Show a) => (a -> Bool) -> RandomIO a -> Int -> IO ()
 propertyTest predicate random n
   | n <= 0 = putStrLn "Tests successful!"
   | otherwise = do
-    testCase <- runRandomIO random
-    if predicate testCase
-      then propertyTest predicate random $ n - 1
-      else putStrLn $ "Test failed on: " <> show testCase
+      testCase <- runRandomIO random
+      if predicate testCase
+        then propertyTest predicate random $ n - 1
+        else putStrLn $ "Test failed on: " <> show testCase
 
 propertyTestWithPreCondition ::
-  Show a => (a -> Bool) -> (a -> Bool) -> RandomIO a -> Int -> IO ()
+  (Show a) => (a -> Bool) -> (a -> Bool) -> RandomIO a -> Int -> IO ()
 propertyTestWithPreCondition precond predicate random n
   | n <= 0 = putStrLn "Tests successful!"
   | otherwise = do
-    testCase <- runRandomIO random
-    if not (precond testCase)
-      then propertyTestWithPreCondition precond predicate random n
-      else
-        if predicate testCase
-          then propertyTestWithPreCondition precond predicate random $ n - 1
-          else putStrLn $ "Test failed on: " <> show testCase
-
+      testCase <- runRandomIO random
+      if not (precond testCase)
+        then propertyTestWithPreCondition precond predicate random n
+        else
+          if predicate testCase
+            then propertyTestWithPreCondition precond predicate random $ n - 1
+            else putStrLn $ "Test failed on: " <> show testCase

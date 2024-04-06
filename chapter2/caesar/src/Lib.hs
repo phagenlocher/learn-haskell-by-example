@@ -1,4 +1,22 @@
-module Lib where
+module Lib
+  ( Alphabet,
+    loremIpsum,
+    lowerAlphabet,
+    upperAlphabet,
+    digits,
+    isLower,
+    isUpper,
+    isDigit,
+    isMisc,
+    indexOf,
+    alphabetRot,
+    upperRot,
+    lowerRot,
+    rotChar,
+    caesar,
+    rot13,
+  )
+where
 
 type Alphabet = [Char]
 

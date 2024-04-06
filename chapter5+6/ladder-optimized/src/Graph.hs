@@ -1,6 +1,23 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Graph where
+module Graph
+  ( DiGraph,
+    empty,
+    addNode,
+    addEdge,
+    addEdges,
+    buildDiGraph,
+    children,
+    deleteNode,
+    deleteNodes,
+    deleteEdge,
+    SearchState,
+    SearchResult (..),
+    bfsSearch,
+    BiSearchState,
+    biBfsSearch,
+  )
+where
 
 import qualified Data.HashMap.Lazy as M
 import Data.Hashable (Hashable)
@@ -67,9 +84,9 @@ bfsSearch :: forall a. (Hashable a, Eq a) => DiGraph a -> a -> a -> Maybe [a]
 bfsSearch graph start end
   | start == end = Just [start]
   | otherwise =
-    case bfsSearch' ([start], graph, empty) of
-      Successful preds -> Just (findSolution preds)
-      Unsuccessful -> Nothing
+      case bfsSearch' ([start], graph, empty) of
+        Successful preds -> Just (findSolution preds)
+        Unsuccessful -> Nothing
   where
     findSolution :: DiGraph a -> [a]
     findSolution g = L.reverse (go end)
@@ -107,9 +124,9 @@ biBfsSearch :: forall a. (Hashable a, Eq a) => DiGraph a -> a -> a -> Maybe [a]
 biBfsSearch graph start end
   | start == end = Just [start]
   | otherwise =
-    let fState = ([start], graph, empty)
-        bState = ([end], graph, empty)
-     in biBfsSearch' (fState, bState)
+      let fState = ([start], graph, empty)
+          bState = ([end], graph, empty)
+       in biBfsSearch' (fState, bState)
   where
     findSolution :: DiGraph a -> a -> [a]
     findSolution g = go

@@ -1,4 +1,18 @@
-module Exercises where
+module Exercises
+  ( member,
+    alter,
+    member',
+    alter',
+    accumChange,
+    addEdges,
+    buildDiGraph,
+    deleteNode,
+    deleteNodes,
+    deleteEdge,
+    deleteEdges,
+    dfsSearch,
+  )
+where
 
 import qualified Data.AssocMap as M
 import qualified Data.List as L
@@ -17,7 +31,7 @@ This function returns a `Just` of the found value associated with the searched
 key. Thus, if we have to check if this result has this constructor which
 can be achieved with the `isJust` function.
 -}
-member :: Eq k => k -> [(k, v)] -> Bool
+member :: (Eq k) => k -> [(k, v)] -> Bool
 member key xs = isJust (lookup key xs)
 
 {-
@@ -33,12 +47,12 @@ by providing the expression in the `Nothing` case as the first argument
 and the expression of the `Just` case as a function from the value
 to that expression as the second argument.
 -}
-alter :: Eq k => (Maybe v -> Maybe v) -> k -> [(k, v)] -> [(k, v)]
+alter :: (Eq k) => (Maybe v -> Maybe v) -> k -> [(k, v)] -> [(k, v)]
 alter f key [] = maybe [] (\value -> [(key, value)]) (f Nothing)
 alter f key ((key', value') : xs)
   | key == key' = maybe xs (\value -> (key, value) : xs) (f (Just value'))
   | otherwise =
-    (key', value') : alter f key xs
+      (key', value') : alter f key xs
 
 {-
 We have constructed the `member` and `alter` function for the new type by
@@ -60,25 +74,25 @@ be a possibility of crashing!
 newtype AssocMap k v = AssocMap [(k, v)]
   deriving (Show)
 
-member' :: Eq k => k -> AssocMap k v -> Bool
+member' :: (Eq k) => k -> AssocMap k v -> Bool
 member' _ (AssocMap []) = False
 member' x (AssocMap ((x', _) : xs))
   | x' == x = True
   | otherwise = member' x (AssocMap xs)
 
-alter' :: Eq k => (Maybe v -> Maybe v) -> k -> AssocMap k v -> AssocMap k v
+alter' :: (Eq k) => (Maybe v -> Maybe v) -> k -> AssocMap k v -> AssocMap k v
 alter' f key (AssocMap []) =
   case f Nothing of
     Nothing -> AssocMap []
     Just value -> AssocMap [(key, value)]
 alter' f key (AssocMap ((key', value') : xs))
   | key == key' =
-    case f (Just value') of
-      Nothing -> AssocMap xs
-      Just value -> AssocMap ((key, value) : xs)
+      case f (Just value') of
+        Nothing -> AssocMap xs
+        Just value -> AssocMap ((key, value) : xs)
   | otherwise =
-    let AssocMap xs' = alter' f key (AssocMap xs)
-     in AssocMap ((key', value') : xs')
+      let AssocMap xs' = alter' f key (AssocMap xs)
+       in AssocMap ((key', value') : xs')
 
 {-
 When taking a good look at the graph functions we can see that the
@@ -111,19 +125,19 @@ elements and the data structure. We can see this with `addEdges`,
 With `buildDiGraph` we can see that we can perform more actions (like
 deconstructing a tuple) in the function given to `accumChange`.
 -}
-addEdges :: Eq a => [(a, a)] -> DiGraph a -> DiGraph a
+addEdges :: (Eq a) => [(a, a)] -> DiGraph a -> DiGraph a
 addEdges = accumChange addEdge
 
-buildDiGraph :: Eq a => [(a, [a])] -> DiGraph a
+buildDiGraph :: (Eq a) => [(a, [a])] -> DiGraph a
 buildDiGraph nodes = accumChange (\(k, v) acc -> M.insert k v acc) nodes M.empty
 
-deleteNode :: Eq a => a -> DiGraph a -> DiGraph a
+deleteNode :: (Eq a) => a -> DiGraph a -> DiGraph a
 deleteNode = M.delete
 
-deleteNodes :: Eq a => [a] -> DiGraph a -> DiGraph a
+deleteNodes :: (Eq a) => [a] -> DiGraph a -> DiGraph a
 deleteNodes = accumChange deleteNode
 
-deleteEdge :: Eq a => (a, a) -> DiGraph a -> DiGraph a
+deleteEdge :: (Eq a) => (a, a) -> DiGraph a -> DiGraph a
 deleteEdge (node, child) =
   M.alter
     ( \mNodes ->
@@ -134,7 +148,7 @@ deleteEdge (node, child) =
     )
     node
 
-deleteEdges :: Eq a => [(a, a)] -> DiGraph a -> DiGraph a
+deleteEdges :: (Eq a) => [(a, a)] -> DiGraph a -> DiGraph a
 deleteEdges = accumChange deleteEdge
 
 {-
@@ -204,12 +218,12 @@ is atleast one successful search, we simply add our current node to that path.
 The bidirectional breadth-first search implementation can be found in the
 `ladder-optimized` project, where it is used to search the ladder graph!
 -}
-dfsSearch :: Eq a => DiGraph a -> a -> a -> Maybe [a]
+dfsSearch :: (Eq a) => DiGraph a -> a -> a -> Maybe [a]
 dfsSearch graph start end
   | start == end = Just [start]
   | otherwise =
-    let graph' = deleteNode start graph
-        searches = [dfsSearch graph' c end | c <- children start graph]
-     in case catMaybes searches of
-          [] -> Nothing
-          (xs : _) -> Just (start : xs)
+      let graph' = deleteNode start graph
+          searches = [dfsSearch graph' c end | c <- children start graph]
+       in case catMaybes searches of
+            [] -> Nothing
+            (xs : _) -> Just (start : xs)

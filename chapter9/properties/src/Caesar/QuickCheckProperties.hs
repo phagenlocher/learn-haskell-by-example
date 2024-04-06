@@ -1,4 +1,8 @@
-module Caesar.QuickCheckProperties where
+module Caesar.QuickCheckProperties
+  ( prop_rot13Symm,
+    prop_alphabetRotClosed,
+  )
+where
 
 import Caesar.Caesar
 import qualified Data.List as L

@@ -1,4 +1,14 @@
-module Csv.Parsing where
+module Csv.Parsing
+  ( Separators (..),
+    HeaderOption (..),
+    CsvParseOptions (..),
+    defaultSeparators,
+    defaultOptions,
+    parseWithHeader,
+    parseWithoutHeader,
+    parseCsv,
+  )
+where
 
 import Csv.Types
 import qualified Data.Either as E

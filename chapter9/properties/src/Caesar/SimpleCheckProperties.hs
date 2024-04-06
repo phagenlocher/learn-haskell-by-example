@@ -1,4 +1,9 @@
-module Caesar.SimpleCheckProperties where
+module Caesar.SimpleCheckProperties
+  ( propRot13Symmetrical,
+    propAlphabetRotClosed,
+    propIsMiscIsDefault,
+  )
+where
 
 import Caesar.Caesar
 import qualified Data.List as L

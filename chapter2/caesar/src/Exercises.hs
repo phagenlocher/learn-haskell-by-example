@@ -1,8 +1,17 @@
-module Exercises where
+module Exercises
+  ( index,
+    index',
+    rot135,
+    count,
+    frequencyStats,
+    tryToDecrypt,
+  )
+where
 
-import Lib -- Import everything from Lib
+-- Import everything from Lib
 import Data.Char (toLower)
-import Data.List (sortBy, find)
+import Data.List (find, sortBy)
+import Lib
 
 {-
 Try to write this `(!!)` function yourself using pattern matching and a
@@ -19,19 +28,20 @@ Thus, the function calls itself recursively on the tail while decrementing the
 wanted index (since we skipped on element in the original list).
 -}
 index [] _ = undefined
-index (x:xs) n =
+index (x : xs) n =
   if n < 0
     then undefined
-    else if n == 0
-      then x
-      else index xs (n-1)
+    else
+      if n == 0
+        then x
+        else index xs (n - 1)
 
 -- This alternative solution uses guards instead of the if-clause
 index' [] _ = undefined
-index' (x:xs) n
+index' (x : xs) n
   | n < 0 = undefined
   | n == 0 = x
-  | otherwise = index xs (n-1)
+  | otherwise = index xs (n - 1)
 
 {-
 ROT13 is nicely symmetrical, however we needed to omit the rotation of digits
@@ -69,7 +79,6 @@ rot135 (ch : xs)
   | isUpper ch = upperRot 13 ch : rot135 xs
   | isDigit ch = alphabetRot digits 5 ch : rot135 xs
   | otherwise = ch : rot135 xs
-
 
 {-
 ROT13 and the Caesars cipher is not a safe way to "encrypt" a message. This can
@@ -142,28 +151,27 @@ gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
 frequencyStats :: [Char] -> [(Char, Int)]
 frequencyStats xs =
   let input = map toLower xs -- Transform the input to lowercase
-      freqs = -- Map each character with how often it appears in the input
+      freqs =
+        -- Map each character with how often it appears in the input
         map (\elem -> (elem, count elem input)) lowerAlphabet
-   -- Here we now sort the tuples of characters and how often they occur
-   in sortBy (\(_, x) (_, y) -> compare y x) freqs
+   in -- Here we now sort the tuples of characters and how often they occur
+      sortBy (\(_, x) (_, y) -> compare y x) freqs
 
 tryToDecrypt :: String -> String
 tryToDecrypt "" = ""
 tryToDecrypt msg =
-  let
-    -- The head of the resulting list from frequencyStats contains the most
-    -- frequenct letter, everything else is ignored. We perform a pattern
-    -- match of which we are certain it will work!
-    ((mostCommonLetter,_):_) = frequencyStats msg
-    -- An associative list (see chapter 3) containing letters and their
-    -- distance to the letter 'e'. Check for yourself that this is correct!
-    distances = zip ['a'..'z'] [-4,-3..]
-    -- We look up the distance of the most common letter to 'e' by performing
-    -- a lookup on the associative list containing the distances. We receive
-    -- a Maybe of the wanted element and pattern match it accordingly.
-    -- (Please see chapter 3 for this!)
-    Just guessedDistance = lookup mostCommonLetter distances
-   -- Now we can finally try to decrypt our message by performing the cipher
-   -- with the guessed distance!
-   in caesar guessedDistance msg
-
+  let -- The head of the resulting list from frequencyStats contains the most
+      -- frequenct letter, everything else is ignored. We perform a pattern
+      -- match of which we are certain it will work!
+      ((mostCommonLetter, _) : _) = frequencyStats msg
+      -- An associative list (see chapter 3) containing letters and their
+      -- distance to the letter 'e'. Check for yourself that this is correct!
+      distances = zip ['a' .. 'z'] [-4, -3 ..]
+      -- We look up the distance of the most common letter to 'e' by performing
+      -- a lookup on the associative list containing the distances. We receive
+      -- a Maybe of the wanted element and pattern match it accordingly.
+      -- (Please see chapter 3 for this!)
+      Just guessedDistance = lookup mostCommonLetter distances
+   in -- Now we can finally try to decrypt our message by performing the cipher
+      -- with the guessed distance!
+      caesar guessedDistance msg

@@ -1,4 +1,4 @@
-module Misc where
+module Misc (prop_sortSorts) where
 
 import Data.List
 import Test.QuickCheck
