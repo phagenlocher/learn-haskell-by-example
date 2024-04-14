@@ -1,0 +1,85 @@
+name:                todolist
+version:             0.1.0.0
+github:              "phagenlocher/guestbook"
+license:             BSD-3-Clause
+author:              "Philipp Hagenlocher"
+maintainer:          "me@philipphagenlocher.de"
+copyright:           "BSD3"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/phagenlocher/guestbook#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- sqlite-simple
+- bytestring
+- text
+- wai
+- warp
+- http-types
+- http-client
+- servant
+- servant-server
+- servant-client
+- blaze-markup
+- blaze-html
+- optparse-applicative
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  todolist-server:
+    main:                Server.hs
+    source-dirs:         app
+    ghc-options:
+    - -main-is Server
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - todolist
+
+  todolist-client:
+    main:                Client.hs
+    source-dirs:         app
+    ghc-options:
+    - -main-is Client
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - todolist
+
+tests:
+  todolist-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - todolist

@@ -1,0 +1,83 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.36.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           backup
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/phagenlocher/learn-haskell-by-example#readme>
+homepage:       https://github.com/phagenlocher/learn-haskell-by-example#readme
+bug-reports:    https://github.com/phagenlocher/learn-haskell-by-example/issues
+author:         Philipp Hagenlocher
+maintainer:     me@philipphagenlocher.de
+copyright:      BSD3
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/phagenlocher/learn-haskell-by-example
+
+library
+  exposed-modules:
+      App
+      App.Impl
+      App.Types
+      System.Directory.Safe
+      System.FileType
+  other-modules:
+      Paths_backup
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , optparse-applicative
+    , transformers
+  default-language: Haskell2010
+
+executable backup-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_backup
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      backup
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , optparse-applicative
+    , transformers
+  default-language: Haskell2010
+
+test-suite backup-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_backup
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      backup
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , directory
+    , filepath
+    , optparse-applicative
+    , transformers
+  default-language: Haskell2010

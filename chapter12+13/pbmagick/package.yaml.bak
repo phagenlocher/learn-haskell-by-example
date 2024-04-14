@@ -1,0 +1,71 @@
+name:                pbmagick
+version:             0.1.0.0
+github:              "phagenlocher/pbmagick"
+license:             BSD3
+author:              "Philipp Hagenlocher"
+maintainer:          "me@philipphagenlocher.de"
+copyright:           "BSD3"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/phagenlocher/pbmagick#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- text
+- bytestring
+- attoparsec
+- JuicyPixels
+- vector
+- parallel
+
+default-extensions:
+  - OverloadedStrings
+  - RecordWildCards
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  pbmagick-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -O2
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - pbmagick
+
+tests:
+  pbmagick-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -O2
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - pbmagick
