@@ -8,10 +8,9 @@ module Exercises
   )
 where
 
--- Import everything from Lib
 import Data.Char (toLower)
-import Data.List (find, sortBy)
-import Lib
+import Data.List (sortBy)
+import Lib -- import everything from Lib
 
 {-
 Try to write this `(!!)` function yourself using pattern matching and a
@@ -27,8 +26,9 @@ is larger than zero the wanted element is somewhere in the tail of the list.
 Thus, the function calls itself recursively on the tail while decrementing the
 wanted index (since we skipped on element in the original list).
 -}
-index [] _ = undefined
-index (x : xs) n =
+index1 :: [a] -> Int -> a
+index1 [] _ = undefined
+index1 (x : xs) n =
   if n < 0
     then undefined
     else
@@ -37,8 +37,9 @@ index (x : xs) n =
         else index xs (n - 1)
 
 -- This alternative solution uses guards instead of the if-clause
-index' [] _ = undefined
-index' (x : xs) n
+index2 :: [a] -> Int -> a
+index2 [] _ = undefined
+index2 (x : xs) n
   | n < 0 = undefined
   | n == 0 = x
   | otherwise = index xs (n - 1)
@@ -108,10 +109,10 @@ character). Otherwise, we don't add anything. Observe how the case of the
 empty list serves as the condition for which this recursion stops.
 -}
 count :: Char -> String -> Int
-count elem [] = 0
-count elem (x : xs)
-  | x == elem = 1 + count elem xs
-  | otherwise = count elem xs
+count element [] = 0
+count element (x : xs)
+  | x == element = 1 + count element xs
+  | otherwise = count element xs
 
 {-
 The second part of this exercise covers some syntax which is explained in
@@ -153,7 +154,7 @@ frequencyStats xs =
   let input = map toLower xs -- Transform the input to lowercase
       freqs =
         -- Map each character with how often it appears in the input
-        map (\elem -> (elem, count elem input)) lowerAlphabet
+        map (\element -> (element, count element input)) lowerAlphabet
    in -- Here we now sort the tuples of characters and how often they occur
       sortBy (\(_, x) (_, y) -> compare y x) freqs
 
@@ -173,5 +174,5 @@ tryToDecrypt msg =
       -- (Please see chapter 3 for this!)
       Just guessedDistance = lookup mostCommonLetter distances
    in -- Now we can finally try to decrypt our message by performing the cipher
-      -- with the guessed distance!
+      -- with the guessed distance
       caesar guessedDistance msg
