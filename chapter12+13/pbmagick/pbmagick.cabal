@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.36.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 
@@ -41,6 +41,7 @@ library
   default-extensions:
       OverloadedStrings
       RecordWildCards
+      NamedFieldPuns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       JuicyPixels
@@ -61,6 +62,7 @@ executable pbmagick-exe
   default-extensions:
       OverloadedStrings
       RecordWildCards
+      NamedFieldPuns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       JuicyPixels
@@ -83,6 +85,7 @@ test-suite pbmagick-test
   default-extensions:
       OverloadedStrings
       RecordWildCards
+      NamedFieldPuns
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       JuicyPixels

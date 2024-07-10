@@ -1,4 +1,8 @@
-module Graphics.PNM.Parsing where
+module Graphics.PNM.Parsing
+  ( parsePnm,
+    readPnmFile,
+  )
+where
 
 import Control.Monad
 import Data.Attoparsec.ByteString
@@ -70,7 +74,7 @@ headerP = do
   width <- C8.decimal
   skipWhitespace
   height <- C8.decimal
-  maxVal <- do
+  maxVal <-
     if magicNumber == P1 || magicNumber == P4
       then return Nothing
       else Just <$> (skipWhitespace *> C8.decimal)
@@ -131,20 +135,20 @@ p4DataP width height = do
     readRow n pxs
       | n <= 0 = return pxs
       | otherwise = do
-        (b7, b6, b5, b4, b3, b2, b1, b0) <- p4PixelP
-        case n of
-          1 -> return $ b7 : pxs
-          2 -> return $ b6 : b7 : pxs
-          3 -> return $ b5 : b6 : b7 : pxs
-          4 -> return $ b4 : b5 : b6 : b7 : pxs
-          5 -> return $ b3 : b4 : b5 : b6 : b7 : pxs
-          6 -> return $ b2 : b3 : b4 : b5 : b6 : b7 : pxs
-          7 -> return $ b1 : b2 : b3 : b4 : b5 : b6 : b7 : pxs
-          8 -> return $ b0 : b1 : b2 : b3 : b4 : b5 : b6 : b7 : pxs
-          _ ->
-            readRow
-              (n - 8)
-              (b0 : b1 : b2 : b3 : b4 : b5 : b6 : b7 : pxs)
+          (b7, b6, b5, b4, b3, b2, b1, b0) <- p4PixelP
+          case n of
+            1 -> return $ b7 : pxs
+            2 -> return $ b6 : b7 : pxs
+            3 -> return $ b5 : b6 : b7 : pxs
+            4 -> return $ b4 : b5 : b6 : b7 : pxs
+            5 -> return $ b3 : b4 : b5 : b6 : b7 : pxs
+            6 -> return $ b2 : b3 : b4 : b5 : b6 : b7 : pxs
+            7 -> return $ b1 : b2 : b3 : b4 : b5 : b6 : b7 : pxs
+            8 -> return $ b0 : b1 : b2 : b3 : b4 : b5 : b6 : b7 : pxs
+            _ ->
+              readRow
+                (n - 8)
+                (b0 : b1 : b2 : b3 : b4 : b5 : b6 : b7 : pxs)
 
 anyWord16 :: Parser Word16
 anyWord16 = do

@@ -31,4 +31,6 @@ countOccurences df =
   foldCsv (\x acc -> if x == df then acc + 1 else acc) 0
 
 searchText :: T.Text -> Csv -> Csv
-searchText t = filterCsv (\f -> dataFieldToText f `UT.contains` t)
+searchText t = filterCsv (\f -> dataFieldToText f `contains` t)
+  where
+    contains = flip T.isInfixOf

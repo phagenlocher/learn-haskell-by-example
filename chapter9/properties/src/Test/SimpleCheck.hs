@@ -66,9 +66,9 @@ randomListN gen n
        in (v : xs, gen'')
 
 randomList :: (Random a) => StdGen -> Int -> ([a], StdGen)
-randomList gen max = randomListN gen' n
+randomList gen maxVal = randomListN gen' n
   where
-    (n, gen') = uniformR (0, max) gen
+    (n, gen') = uniformR (0, maxVal) gen
 
 randomList' :: (Random a) => StdGen -> ([a], StdGen)
 randomList' = flip randomList 100
@@ -130,11 +130,11 @@ replicateIO n act
       return $ x : xs
 
 suchThat :: RandomIO a -> (a -> Bool) -> RandomIO a
-suchThat rand pred = RandomIO $ do
+suchThat rand predicate = RandomIO $ do
   val <- runRandomIO rand
-  if pred val
+  if predicate val
     then return val
-    else runRandomIO $ suchThat rand pred
+    else runRandomIO $ suchThat rand predicate
 
 nonNegative :: (Num a, Ord a, Random a) => RandomIO a
 nonNegative = one `suchThat` (> 0)

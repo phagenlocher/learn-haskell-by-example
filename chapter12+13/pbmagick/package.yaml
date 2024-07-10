@@ -29,8 +29,9 @@ dependencies:
 - parallel
 
 default-extensions:
-  - OverloadedStrings
-  - RecordWildCards
+- OverloadedStrings
+- RecordWildCards
+- NamedFieldPuns
 
 ghc-options:
 - -Wall

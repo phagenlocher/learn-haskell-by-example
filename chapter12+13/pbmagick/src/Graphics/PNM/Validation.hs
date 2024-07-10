@@ -1,5 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
-
 module Graphics.PNM.Validation (validatePnm) where
 
 import qualified Codec.Picture as P
