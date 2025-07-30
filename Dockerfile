@@ -15,5 +15,5 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | \
     sh
 
 ENV PATH=$PATH:/home/haskell/.ghcup/bin
-RUN /home/haskell/.ghcup/bin/ghcup install stack
-WORKDIR /haskell
+RUN ghcup install stack
+WORKDIR /work
